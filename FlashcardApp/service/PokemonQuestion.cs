@@ -1,18 +1,24 @@
+using FlashcardApp.Model;
+
 namespace FlashcardApp.Service;
 
 public sealed class PokemonQuestion : IQuestion
 {
-    private readonly string _pokemonName;
-    private readonly string _field;
+    private readonly Pokemon _pokemon;
+    public Pokemon Pokemon { get { return _pokemon; } }
 
-    public PokemonQuestion(string pokemonName, string field)
+    private readonly string _field;
+    public string Field { get { return _field; } }
+
+
+    public PokemonQuestion(Pokemon pokemon, string field)
     {
-        _pokemonName = pokemonName;
+        _pokemon = pokemon;
         _field = field;
     }
 
     public string AsString()
     {
-        return $"What is the {_field} of the Pokémon {_pokemonName}?";
+        return $"What is {Pokemon.Name}'s {Field}?";
     }
 }
