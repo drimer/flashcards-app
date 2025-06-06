@@ -25,13 +25,22 @@ public static class QuestionsController
         };
         var question = new Service.PokemonQuestion(pokemon, "type");
 
-        var response = new Dto.NewQuestionResponseDto
+        return new Dto.NewQuestionResponseDto
         {
             Type = question.GetType().Name,
             Field = question.Field,
             Message = question.AsString()
         };
+    }
 
-        return response;
+    public static Dto.PostAnswerResponseDto SubmitAnswer(HttpContext httpContext, Dto.PostAnswerRequestDto request)
+    {
+        // In a real application, you would validate the answer against the question.
+        // Here we just return a dummy response.
+        return new Dto.PostAnswerResponseDto
+        {
+            IsCorrect = true,
+            Message = "Correct answer!"
+        };
     }
 }

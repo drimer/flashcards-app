@@ -31,6 +31,12 @@ public class Program
         app.MapGet("/question", Controller.QuestionsController.GetNewQuestion)
             .WithName("GetNewQuestion")
             .WithOpenApi();
+        app.MapPost("/question/answer", Controller.QuestionsController.SubmitAnswer)
+            .WithName("SubmitAnswer")
+            .WithOpenApi()
+            .Accepts<Dto.PostAnswerRequestDto>("application/json")
+            .Produces<Dto.PostAnswerResponseDto>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest);
 
         app.Run();
     }
