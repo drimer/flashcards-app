@@ -13,7 +13,7 @@ public class WeatherForecast
 
 
 
-public static class WeatherForecastController
+public static class QuestionsController
 {
     public static object GetWeatherForecast(HttpContext httpContext)
     {
@@ -32,5 +32,18 @@ public static class WeatherForecastController
             .ToArray();
 
         return forecast;
+    }
+
+    public static object GetNewQuestion(HttpContext httpContext)
+    {
+        var response = new Dto.NewQuestionResponseDto
+        {
+            Type = "text",
+            Field = "question",
+            Id = 1,
+            Message = "What is the capital of France?"
+        };
+
+        return response;
     }
 }

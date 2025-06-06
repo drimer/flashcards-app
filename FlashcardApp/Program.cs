@@ -28,8 +28,8 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapGet("/weatherforecast", Controller.WeatherForecastController.GetWeatherForecast)
-            .WithName("GetWeatherForecast")
+        app.MapGet("/question", Controller.QuestionsController.GetNewQuestion)
+            .WithName("GetNewQuestion")
             .WithOpenApi();
 
         app.Run();
