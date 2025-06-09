@@ -1,7 +1,7 @@
 namespace FlashcardApp.Model;
 
 
-public sealed class Pokemon
+public sealed class Pokemon : ITopic
 {
     public int Number { get; set; }
     public string Name { get; set; } = string.Empty;

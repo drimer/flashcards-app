@@ -27,9 +27,16 @@ public static class QuestionsController
 
         return new Dto.NewQuestionResponseDto
         {
-            Type = question.GetType().Name,
-            Field = question.Field,
-            Message = question.AsString()
+            Question = new Dto.QuestionDto
+            {
+                Type = question.GetType().Name,
+                Topic = new Dto.PokemonTopicDto
+                {
+                    Number = pokemon.Number
+                },
+                Message = question.AsString(),
+                Field = question.Field
+            }
         };
     }
 

@@ -21,4 +21,9 @@ public sealed class PokemonQuestion : IQuestion
     {
         return $"What is {Pokemon.Name}'s {Field}?";
     }
+
+    public ITopic getTopic()
+    {
+        return Pokemon;
+    }
 }
