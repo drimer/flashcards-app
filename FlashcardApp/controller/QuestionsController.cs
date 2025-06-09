@@ -1,3 +1,5 @@
+using FlashcardApp.Service;
+
 namespace FlashcardApp.Controller;
 
 public class WeatherForecast
@@ -42,12 +44,56 @@ public static class QuestionsController
 
     public static Dto.PostAnswerResponseDto SubmitAnswer(HttpContext httpContext, Dto.PostAnswerRequestDto request)
     {
-        // In a real application, you would validate the answer against the question.
-        // Here we just return a dummy response.
-        return new Dto.PostAnswerResponseDto
+
+        if (request.Question.Type != "PokemonQuestion")
         {
-            IsCorrect = true,
-            Message = "Correct answer!"
-        };
+            return new Dto.PostAnswerResponseDto
+            {
+                IsCorrect = false,
+                Message = "Invalid question type."
+            };
+        }
+
+        if (request.Question.Topic == null)
+        {
+            return new Dto.PostAnswerResponseDto
+            {
+                IsCorrect = false,
+                Message = "Invalid topic."
+            };
+        }
+
+        var isCorrect = (new AnswerEvaluator()).IsCorrect(
+            new Service.PokemonQuestion(
+                new Model.Pokemon
+                {
+                    Number = request.Question.Topic.Number,
+                    Name = "pikachu",  // TODO: Retrieve name from API Call using Number
+                    Types = new[] { "electric" }  // TODO: Retrieve types from API Call using Number
+                },
+                request.Question.Field
+            ),
+            new Service.PokemonAnswer
+            {
+                Value = request.Answer.Trim().ToLower()
+            }
+        );
+
+        if (!isCorrect)
+        {
+            return new Dto.PostAnswerResponseDto
+            {
+                IsCorrect = false,
+                Message = "Incorrect answer. Please try again."
+            };
+        }
+        else
+        {
+            return new Dto.PostAnswerResponseDto
+            {
+                IsCorrect = true,
+                Message = "Correct answer!"
+            };
+        }
     }
 }
