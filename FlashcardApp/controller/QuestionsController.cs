@@ -1,22 +1,15 @@
+using FlashcardApp.Client;
 using FlashcardApp.Service;
 
 namespace FlashcardApp.Controller;
-
-public class WeatherForecast
-{
-    public DateOnly Date { get; set; }
-
-    public int TemperatureC { get; set; }
-
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-
-    public string? Summary { get; set; }
-};
 
 
 
 public static class QuestionsController
 {
+
+    private static readonly PokemonApiClient _pokemonApiClient = new();
+
     public static object GetNewQuestion(HttpContext httpContext)
     {
         var pokemon = new Model.Pokemon
@@ -42,9 +35,8 @@ public static class QuestionsController
         };
     }
 
-    public static Dto.PostAnswerResponseDto SubmitAnswer(HttpContext httpContext, Dto.PostAnswerRequestDto request)
+    public static async Task<Dto.PostAnswerResponseDto> SubmitAnswer(HttpContext httpContext, Dto.PostAnswerRequestDto request)
     {
-
         if (request.Question.Type != "PokemonQuestion")
         {
             return new Dto.PostAnswerResponseDto
@@ -59,20 +51,28 @@ public static class QuestionsController
             return new Dto.PostAnswerResponseDto
             {
                 IsCorrect = false,
-                Message = "Invalid topic."
+                Message = "Topic is required."
+            };
+        }
+
+        Model.Pokemon pokemon;
+        pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
+
+        try
+        {
+            pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
+        }
+        catch (Exception ex)
+        {
+            return new Dto.PostAnswerResponseDto
+            {
+                IsCorrect = false,
+                Message = $"Error retrieving Pokemon data: {ex.Message}"
             };
         }
 
         var isCorrect = (new AnswerEvaluator()).IsCorrect(
-            new Service.PokemonQuestion(
-                new Model.Pokemon
-                {
-                    Number = request.Question.Topic.Number,
-                    Name = "pikachu",  // TODO: Retrieve name from API Call using Number
-                    Types = new[] { "electric" }  // TODO: Retrieve types from API Call using Number
-                },
-                request.Question.Field
-            ),
+            new Service.PokemonQuestion(pokemon, request.Question.Field),
             new Service.PokemonAnswer
             {
                 Value = request.Answer.Trim().ToLower()
