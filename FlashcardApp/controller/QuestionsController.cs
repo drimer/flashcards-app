@@ -1,4 +1,5 @@
 using FlashcardApp.Client;
+using FlashcardApp.Model;
 using FlashcardApp.Service;
 
 namespace FlashcardApp.Controller;
@@ -12,12 +13,14 @@ public static class QuestionsController
 
     public static object GetNewQuestion(HttpContext httpContext)
     {
-        var pokemon = new Model.Pokemon
+        var randomNumber = new Random().Next(1, 1026);
+        Pokemon pokemon;
+        pokemon = _pokemonApiClient.GetPokemonByNumberAsync(randomNumber).Result;
+        if (pokemon == null)
         {
-            Number = 25,
-            Name = "Pikachu",
-            Types = new[] { "Electric" }
-        };
+            return Results.BadRequest("Pokemon not found.");
+        }
+
         var question = new Service.PokemonQuestion(pokemon, "type");
 
         return new Dto.NewQuestionResponseDto
