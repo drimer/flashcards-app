@@ -10,17 +10,11 @@ public static class QuestionsController
 {
 
     private static readonly PokemonApiClient _pokemonApiClient = new();
+    private static readonly PokemonApiService _pokemonApiService = new();
 
     public static object GetNewQuestion(HttpContext httpContext, string topic)
     {
-        var randomNumber = new Random().Next(1, 1026);
-        Pokemon pokemon;
-        pokemon = _pokemonApiClient.GetPokemonByNumberAsync(randomNumber).Result;
-        if (pokemon == null)
-        {
-            return Results.BadRequest("Pokemon not found.");
-        }
-
+        var pokemon = _pokemonApiService.GetRandomPokemonAsync(topic).Result;
         var question = (new QuestionBuilder()).CreateQuestion(pokemon);
 
         return new Dto.NewQuestionResponseDto

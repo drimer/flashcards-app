@@ -19,13 +19,12 @@ public sealed class PokemonQuestion : IQuestion
         switch (Field)
         {
             case "type":
-                return $"What is {Pokemon.Name}'s type?";
+                return $"What is {Pokemon.CapitalisedName}'s type?";
             case "hp":
-                return $"What is {Pokemon.Name}'s base HP?";
+                return $"What is {Pokemon.CapitalisedName}'s base HP?";
             default:
                 throw new ArgumentException($"Unknown field: {Field}");
         }
-        return $"What is {Pokemon.Name}'s {Field}?";
     }
 
     public ITopic getTopic()
