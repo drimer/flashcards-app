@@ -39,6 +39,10 @@ public class PokemonApiClient
                 .GetProperty("name")
                 .GetString();
 
+            var hp = root.TryGetProperty("stats", out var stats) && stats.GetArrayLength() > 0
+                ? stats[0].GetProperty("base_stat").GetInt32()
+                : 0;
+
             var typesArray = root.GetProperty("types");
             var type1 = typesArray[0].GetProperty("type").GetProperty("name").GetString();
             var type2 = typesArray.GetArrayLength() > 1
@@ -49,7 +53,8 @@ public class PokemonApiClient
             {
                 Number = number,
                 Name = name,
-                Types = new[] { type1, type2 }
+                Types = new[] { type1, type2 },
+                Hp = hp
             };
         }
     }

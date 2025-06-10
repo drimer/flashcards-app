@@ -17,9 +17,9 @@ public class AnswerEvaluator
         {
             return question.Pokemon.Types.Contains(answer.Value.Trim().ToLower());
         }
-        else if (question.Field == "name")
+        else if (question.Field == "hp")
         {
-            return question.Pokemon.Name.Equals(answer.Value.Trim(), StringComparison.OrdinalIgnoreCase);
+            return int.Parse(answer.Value) == question.Pokemon.Hp;
         }
         else
         {
