@@ -4,21 +4,27 @@ namespace FlashcardApp.Service;
 
 public sealed class PokemonQuestion : IQuestion
 {
-    private readonly Pokemon _pokemon;
-    public Pokemon Pokemon { get { return _pokemon; } }
-
-    private readonly string _field;
-    public string Field { get { return _field; } }
-
+    public string Type { get => "PokemonQuestion"; }
+    public Pokemon Pokemon { get; init; }
+    public string Field { get; init; }
 
     public PokemonQuestion(Pokemon pokemon, string field)
     {
-        _pokemon = pokemon;
-        _field = field;
+        Pokemon = pokemon;
+        Field = field;
     }
 
     public string AsString()
     {
+        switch (Field)
+        {
+            case "type":
+                return $"What is {Pokemon.Name}'s type?";
+            case "hp":
+                return $"What is {Pokemon.Name}'s base HP?";
+            default:
+                throw new ArgumentException($"Unknown field: {Field}");
+        }
         return $"What is {Pokemon.Name}'s {Field}?";
     }
 

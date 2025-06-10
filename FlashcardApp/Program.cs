@@ -28,7 +28,7 @@ public class Program
 
         app.UseAuthorization();
 
-        app.MapGet("/question", Controller.QuestionsController.GetNewQuestion)
+        app.MapGet("/question/{topic}", Controller.QuestionsController.GetNewQuestion)
             .WithName("GetNewQuestion")
             .WithOpenApi();
         app.MapPost("/question/answer", Controller.QuestionsController.SubmitAnswer)

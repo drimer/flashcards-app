@@ -11,7 +11,7 @@ public static class QuestionsController
 
     private static readonly PokemonApiClient _pokemonApiClient = new();
 
-    public static object GetNewQuestion(HttpContext httpContext)
+    public static object GetNewQuestion(HttpContext httpContext, string topic)
     {
         var randomNumber = new Random().Next(1, 1026);
         Pokemon pokemon;
@@ -21,7 +21,7 @@ public static class QuestionsController
             return Results.BadRequest("Pokemon not found.");
         }
 
-        var question = new Service.PokemonQuestion(pokemon, "type");
+        var question = (new QuestionBuilder()).CreateQuestion(pokemon);
 
         return new Dto.NewQuestionResponseDto
         {
@@ -60,19 +60,6 @@ public static class QuestionsController
 
         Model.Pokemon pokemon;
         pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
-
-        try
-        {
-            pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
-        }
-        catch (Exception ex)
-        {
-            return new Dto.PostAnswerResponseDto
-            {
-                IsCorrect = false,
-                Message = $"Error retrieving Pokemon data: {ex.Message}"
-            };
-        }
 
         var isCorrect = (new AnswerEvaluator()).IsCorrect(
             new Service.PokemonQuestion(pokemon, request.Question.Field),
