@@ -15,15 +15,14 @@ public class HistoricalFigureApiClient
         },
     };
 
-    public Task<HistoricalFigure?> GetHistoricalFigureByNumberAsync(int number)
+    public HistoricalFigure? GetHistoricalFigureByNumberAsync(int number)
     {
-        return Task.FromResult(AllFigures.FirstOrDefault(f => f.Number == number));
+        return AllFigures.FirstOrDefault(f => f.Number == number);
     }
 
-    public Task<HistoricalFigure> GetRandomHistoricalFigureAsync()
+    public HistoricalFigure GetRandomHistoricalFigureAsync()
     {
         var random = new Random();
-        var figure = AllFigures[random.Next(AllFigures.Length)];
-        return Task.FromResult(figure);
+        return AllFigures[random.Next(AllFigures.Length)];
     }
 }

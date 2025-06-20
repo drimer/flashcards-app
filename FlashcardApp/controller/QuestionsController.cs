@@ -14,12 +14,18 @@ public static class QuestionsController
     private static readonly PokemonApiService _pokemonApiService = new();
     private static readonly HistoricalFigureApiClient _historicalFigureApiClient = new();
 
-    public static object GetNewQuestion(HttpContext httpContext, string topic)
+    public static async Task<object> GetNewQuestion(HttpContext httpContext, string topic)
     {
+        var countSuccess = int.TryParse(httpContext.Request.Query["count"], out int count);
+        if (countSuccess && count < 1)
+        {
+            return new { Error = "Count must be at least 1." };
+        }
+
         return topic switch
         {
-            "pokemon" => GetNewPokemonQuestion(httpContext),
-            "historicalFigure" => GetNewHistoricalFigureQuestion(httpContext),
+            "pokemon" => await GetNewPokemonQuestions(count),
+            "historicalFigure" => GetNewHistoricalFigureQuestions(count),
             _ => new { Error = "Invalid topic." }
         };
     }
@@ -38,40 +44,58 @@ public static class QuestionsController
         };
     }
 
-    private static object GetNewHistoricalFigureQuestion(HttpContext httpContext)
+    private static Dto.NewQuestionResponseDto[] GetNewHistoricalFigureQuestions(int batchSize)
     {
-        var historicalFigure = _historicalFigureApiClient.GetRandomHistoricalFigureAsync().Result;
-        var question = (new QuestionBuilder()).CreateQuestion(historicalFigure);
-        return new Dto.NewQuestionResponseDto
+        var tasks = new Dto.NewQuestionResponseDto[batchSize];
+
+        for (int i = 0; i < batchSize; i++)
         {
-            Question = new Dto.QuestionDto
+            var historicalFigure = _historicalFigureApiClient.GetRandomHistoricalFigureAsync();
+            var question = (new QuestionBuilder()).CreateQuestion(historicalFigure);
+            var responseDto = new Dto.NewQuestionResponseDto
             {
-                Type = question.GetType().Name,
-                Topic = new Dto.TopicDto
+                Question = new Dto.QuestionDto
                 {
-                    Id = historicalFigure.Number
-                },
-                Message = question.AsString(),
-                Field = question.Field
-            }
-        };
+                    Type = question.GetType().Name,
+                    Topic = new Dto.TopicDto
+                    {
+                        Id = historicalFigure.Number
+                    },
+                    Message = question.AsString(),
+                    Field = question.Field
+                }
+            };
+
+            tasks[i] = responseDto;
+        }
+
+        return tasks;
     }
 
-    private static Dto.NewQuestionResponseDto GetNewPokemonQuestion(HttpContext httpContext)
+    private static async Task<Dto.NewQuestionResponseDto[]> GetNewPokemonQuestions(int batchSize)
     {
-        var pokemon = _pokemonApiService.GetRandomPokemonAsync().Result;
-        var question = (new QuestionBuilder()).CreateQuestion(pokemon);
+        var tasks = new Dto.NewQuestionResponseDto[batchSize];
 
-        return new Dto.NewQuestionResponseDto
+        for (int i = 0; i < batchSize; i++)
         {
-            Question = new Dto.QuestionDto
+            var pokemon = await _pokemonApiService.GetRandomPokemonAsync();
+            var question = (new QuestionBuilder()).CreateQuestion(pokemon);
+
+            var responseDto = new Dto.NewQuestionResponseDto
             {
-                Type = question.GetType().Name,
-                Topic = PokemonTopicMapper.ToTopicDto(pokemon),
-                Message = question.AsString(),
-                Field = question.Field
-            }
-        };
+                Question = new Dto.QuestionDto
+                {
+                    Type = question.GetType().Name,
+                    Topic = PokemonTopicMapper.ToTopicDto(pokemon),
+                    Message = question.AsString(),
+                    Field = question.Field
+                }
+            };
+
+            tasks[i] = responseDto;
+        }
+
+        return tasks;
     }
 
     private static async Task<Dto.PostAnswerResponseDto> HandlePokemonQuestion(Dto.PostAnswerRequestDto request)
@@ -94,7 +118,7 @@ public static class QuestionsController
     private static async Task<Dto.PostAnswerResponseDto> HandleHistoricalFigureQuestion(Dto.PostAnswerRequestDto request)
     {
         var topic = HistoricalFigureTopicMapper.ToHistoricalFigure(request.Question.Topic);
-        var historicalFigure = await _historicalFigureApiClient.GetHistoricalFigureByNumberAsync(topic.Number);
+        var historicalFigure = _historicalFigureApiClient.GetHistoricalFigureByNumberAsync(topic.Number);
         var question = new HistoricalFigureQuestion(historicalFigure, request.Question.Field);
         var answer = new Answer { Value = request.Answer.Trim().ToLower() };
 
