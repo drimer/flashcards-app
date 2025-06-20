@@ -1,6 +1,4 @@
-using FlashcardApp.Model;
-
-namespace FlashcardApp.Service;
+namespace FlashcardApp.Model;
 
 public interface IQuestion
 {

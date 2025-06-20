@@ -1,5 +1,7 @@
 namespace FlashcardApp.Service;
 
+using FlashcardApp.Model;
+
 public class AnswerEvaluator
 {
     public bool IsCorrect(IQuestion question, PokemonAnswer answer)

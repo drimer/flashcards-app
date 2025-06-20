@@ -1,4 +1,4 @@
-namespace FlashcardApp.Service;
+namespace FlashcardApp.Model;
 
 public class PokemonAnswer
 {

@@ -56,8 +56,8 @@ public static class QuestionsController
         pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
 
         var isCorrect = (new AnswerEvaluator()).IsCorrect(
-            new Service.PokemonQuestion(pokemon, request.Question.Field),
-            new Service.PokemonAnswer
+            new Model.PokemonQuestion(pokemon, request.Question.Field),
+            new Model.PokemonAnswer
             {
                 Value = request.Answer.Trim().ToLower()
             }
