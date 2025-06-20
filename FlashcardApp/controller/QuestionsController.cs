@@ -79,7 +79,7 @@ public static class QuestionsController
         var topic = PokemonTopicMapper.ToPokemon(request.Question.Topic);
         var pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(topic.Number);
         var question = new PokemonQuestion(pokemon, request.Question.Field);
-        var answer = new PokemonAnswer { Value = request.Answer.Trim().ToLower() };
+        var answer = new Answer { Value = request.Answer.Trim().ToLower() };
 
         var evaluator = new PokemonAnswerEvaluator();
         bool isCorrect = evaluator.IsCorrect(question, answer);
@@ -93,12 +93,18 @@ public static class QuestionsController
 
     private static async Task<Dto.PostAnswerResponseDto> HandleHistoricalFigureQuestion(Dto.PostAnswerRequestDto request)
     {
-        // Assuming HistoricalFigureQuestion is implemented similarly to PokemonQuestion
-        // This part would need to be implemented based on the actual HistoricalFigureQuestion logic
+        var topic = HistoricalFigureTopicMapper.ToHistoricalFigure(request.Question.Topic);
+        var historicalFigure = await _historicalFigureApiClient.GetHistoricalFigureByNumberAsync(topic.Number);
+        var question = new HistoricalFigureQuestion(historicalFigure, request.Question.Field);
+        var answer = new Answer { Value = request.Answer.Trim().ToLower() };
+
+        var evaluator = new HistoricalFigureAnswerEvaluator();
+        bool isCorrect = evaluator.IsCorrect(question, answer);
+
         return new Dto.PostAnswerResponseDto
         {
-            IsCorrect = false,
-            Message = "Historical figure questions are not yet implemented."
+            IsCorrect = isCorrect,
+            Message = isCorrect ? "Correct!" : "Incorrect."
         };
     }
 }

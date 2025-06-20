@@ -4,5 +4,5 @@ using FlashcardApp.Model;
 
 public interface IAnswerEvaluator
 {
-    bool IsCorrect(IQuestion question, PokemonAnswer answer);
+    bool IsCorrect(IQuestion question, Answer answer);
 }

@@ -19,7 +19,7 @@ public sealed class HistoricalFigureQuestion : IQuestion
         {
             "conflicts" => $"Name one conflict where {Topic.Name} was involved in.",
             "occupation" => $"Name one occupation of {Topic.Name}.",
-            "causeOfDeath" => $"What was the cause of death of {Topic.Name}?",
+            "causeofdeath" => $"What was the cause of death of {Topic.Name}?",
             _ => throw new ArgumentException($"Unknown field: {Field}")
         };
     }

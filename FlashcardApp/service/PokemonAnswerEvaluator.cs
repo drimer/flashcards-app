@@ -4,7 +4,7 @@ using FlashcardApp.Model;
 
 public class PokemonAnswerEvaluator : IAnswerEvaluator
 {
-    public bool IsCorrect(IQuestion question, PokemonAnswer answer)
+    public bool IsCorrect(IQuestion question, Answer answer)
     {
         try
         {
