@@ -1,3 +1,3 @@
 namespace FlashcardApp.Dto;
 
-public record PokemonTopicDto { public int Number { get; set; } };
+public record TopicDto { public int Id { get; set; } };

@@ -12,6 +12,7 @@ public static class QuestionsController
 
     private static readonly PokemonApiClient _pokemonApiClient = new();
     private static readonly PokemonApiService _pokemonApiService = new();
+    private static readonly HistoricalFigureApiClient _historicalFigureApiClient = new();
 
     public static object GetNewQuestion(HttpContext httpContext, string topic)
     {
@@ -39,9 +40,21 @@ public static class QuestionsController
 
     private static object GetNewHistoricalFigureQuestion(HttpContext httpContext)
     {
-        // Assuming HistoricalFigureQuestion is implemented similarly to PokemonQuestion
-        // This part would need to be implemented based on the actual HistoricalFigureQuestion logic
-        return new { Error = "Historical figure questions are not yet implemented." };
+        var historicalFigure = _historicalFigureApiClient.GetRandomHistoricalFigureAsync().Result;
+        var question = (new QuestionBuilder()).CreateQuestion(historicalFigure);
+        return new Dto.NewQuestionResponseDto
+        {
+            Question = new Dto.QuestionDto
+            {
+                Type = question.GetType().Name,
+                Topic = new Dto.TopicDto
+                {
+                    Id = historicalFigure.Number
+                },
+                Message = question.AsString(),
+                Field = question.Field
+            }
+        };
     }
 
     private static Dto.NewQuestionResponseDto GetNewPokemonQuestion(HttpContext httpContext)
@@ -54,10 +67,7 @@ public static class QuestionsController
             Question = new Dto.QuestionDto
             {
                 Type = question.GetType().Name,
-                Topic = new Dto.PokemonTopicDto
-                {
-                    Number = pokemon.Number
-                },
+                Topic = PokemonTopicMapper.ToTopicDto(pokemon),
                 Message = question.AsString(),
                 Field = question.Field
             }
@@ -66,11 +76,12 @@ public static class QuestionsController
 
     private static async Task<Dto.PostAnswerResponseDto> HandlePokemonQuestion(Dto.PostAnswerRequestDto request)
     {
-        var pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
+        var topic = PokemonTopicMapper.ToPokemon(request.Question.Topic);
+        var pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(topic.Number);
         var question = new PokemonQuestion(pokemon, request.Question.Field);
         var answer = new PokemonAnswer { Value = request.Answer.Trim().ToLower() };
 
-        var evaluator = new AnswerEvaluator();
+        var evaluator = new PokemonAnswerEvaluator();
         bool isCorrect = evaluator.IsCorrect(question, answer);
 
         return new Dto.PostAnswerResponseDto

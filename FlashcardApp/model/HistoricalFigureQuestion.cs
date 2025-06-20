@@ -15,7 +15,7 @@ public sealed class HistoricalFigureQuestion : IQuestion
     public ITopic getTopic() => Topic;
     public string AsString()
     {
-        return Field switch
+        return Field.ToLower() switch
         {
             "conflicts" => $"Name one conflict where {Topic.Name} was involved in.",
             "occupation" => $"Name one occupation of {Topic.Name}.",
