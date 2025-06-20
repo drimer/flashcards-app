@@ -7,7 +7,7 @@ class PokemonApiService
 {
     private static readonly PokemonApiClient _pokemonApiClient = new();
 
-    public async Task<Model.Pokemon?> GetRandomPokemonAsync(string name)
+    public async Task<Model.Pokemon?> GetRandomPokemonAsync()
     {
         var randomNumber = new Random().Next(1, 1026);
         var pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(randomNumber);

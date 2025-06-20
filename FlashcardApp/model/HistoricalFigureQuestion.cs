@@ -4,11 +4,12 @@ public sealed class HistoricalFigureQuestion : IQuestion
 {
     public string Type => "HistoricalFigureQuestion";
     public HistoricalFigure Topic { get; init; }
-    public string Field { get; init; } = "Historical Figure";
+    public string Field { get; init; }
 
-    public HistoricalFigureQuestion(HistoricalFigure topic)
+    public HistoricalFigureQuestion(HistoricalFigure topic, string field)
     {
         Topic = topic;
+        Field = field;
     }
 
     public ITopic getTopic() => Topic;

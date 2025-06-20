@@ -1,6 +1,7 @@
 using FlashcardApp.Client;
 using FlashcardApp.Model;
 using FlashcardApp.Service;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace FlashcardApp.Controller;
 
@@ -14,7 +15,38 @@ public static class QuestionsController
 
     public static object GetNewQuestion(HttpContext httpContext, string topic)
     {
-        var pokemon = _pokemonApiService.GetRandomPokemonAsync(topic).Result;
+        return topic switch
+        {
+            "pokemon" => GetNewPokemonQuestion(httpContext),
+            "historicalFigure" => GetNewHistoricalFigureQuestion(httpContext),
+            _ => new { Error = "Invalid topic." }
+        };
+    }
+
+    public static async Task<Dto.PostAnswerResponseDto> SubmitAnswer(HttpContext httpContext, Dto.PostAnswerRequestDto request)
+    {
+        return request.Question.Type switch
+        {
+            "PokemonQuestion" => await HandlePokemonQuestion(request),
+            "HistoricalFigureQuestion" => await HandleHistoricalFigureQuestion(request),
+            _ => new Dto.PostAnswerResponseDto
+            {
+                IsCorrect = false,
+                Message = "Invalid question type."
+            }
+        };
+    }
+
+    private static object GetNewHistoricalFigureQuestion(HttpContext httpContext)
+    {
+        // Assuming HistoricalFigureQuestion is implemented similarly to PokemonQuestion
+        // This part would need to be implemented based on the actual HistoricalFigureQuestion logic
+        return new { Error = "Historical figure questions are not yet implemented." };
+    }
+
+    private static Dto.NewQuestionResponseDto GetNewPokemonQuestion(HttpContext httpContext)
+    {
+        var pokemon = _pokemonApiService.GetRandomPokemonAsync().Result;
         var question = (new QuestionBuilder()).CreateQuestion(pokemon);
 
         return new Dto.NewQuestionResponseDto
@@ -32,52 +64,30 @@ public static class QuestionsController
         };
     }
 
-    public static async Task<Dto.PostAnswerResponseDto> SubmitAnswer(HttpContext httpContext, Dto.PostAnswerRequestDto request)
+    private static async Task<Dto.PostAnswerResponseDto> HandlePokemonQuestion(Dto.PostAnswerRequestDto request)
     {
-        if (request.Question.Type != "PokemonQuestion")
-        {
-            return new Dto.PostAnswerResponseDto
-            {
-                IsCorrect = false,
-                Message = "Invalid question type."
-            };
-        }
+        var pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
+        var question = new PokemonQuestion(pokemon, request.Question.Field);
+        var answer = new PokemonAnswer { Value = request.Answer.Trim().ToLower() };
 
-        if (request.Question.Topic == null)
-        {
-            return new Dto.PostAnswerResponseDto
-            {
-                IsCorrect = false,
-                Message = "Topic is required."
-            };
-        }
+        var evaluator = new AnswerEvaluator();
+        bool isCorrect = evaluator.IsCorrect(question, answer);
 
-        Model.Pokemon pokemon;
-        pokemon = await _pokemonApiClient.GetPokemonByNumberAsync(request.Question.Topic.Number);
-
-        var isCorrect = (new AnswerEvaluator()).IsCorrect(
-            new Model.PokemonQuestion(pokemon, request.Question.Field),
-            new Model.PokemonAnswer
-            {
-                Value = request.Answer.Trim().ToLower()
-            }
-        );
-
-        if (!isCorrect)
+        return new Dto.PostAnswerResponseDto
         {
-            return new Dto.PostAnswerResponseDto
-            {
-                IsCorrect = false,
-                Message = "Incorrect answer. Please try again."
-            };
-        }
-        else
+            IsCorrect = isCorrect,
+            Message = isCorrect ? "Correct!" : "Incorrect."
+        };
+    }
+
+    private static async Task<Dto.PostAnswerResponseDto> HandleHistoricalFigureQuestion(Dto.PostAnswerRequestDto request)
+    {
+        // Assuming HistoricalFigureQuestion is implemented similarly to PokemonQuestion
+        // This part would need to be implemented based on the actual HistoricalFigureQuestion logic
+        return new Dto.PostAnswerResponseDto
         {
-            return new Dto.PostAnswerResponseDto
-            {
-                IsCorrect = true,
-                Message = "Correct answer!"
-            };
-        }
+            IsCorrect = false,
+            Message = "Historical figure questions are not yet implemented."
+        };
     }
 }
