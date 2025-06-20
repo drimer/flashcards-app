@@ -1,0 +1,160 @@
+{
+	"info": {
+		"_postman_id": "5a5f3ff4-319a-4870-83b3-c8669228d1eb",
+		"name": "Flashcards App",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1419553"
+	},
+	"item": [
+		{
+			"name": "Get Question - Pokemon",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5109/question/pokemon",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5109",
+					"path": [
+						"question",
+						"pokemon"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Question Batch - Pokemon",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5109/question/pokemon?count=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5109",
+					"path": [
+						"question",
+						"pokemon"
+					],
+					"query": [
+						{
+							"key": "count",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit Answer - Pokemon",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\": {\r\n        \"type\": \"PokemonQuestion\",\r\n        \"message\": \"What is relicanth's base HP?\",\r\n        \"topic\": {\r\n            \"id\": 369\r\n        },\r\n        \"field\": \"hp\"\r\n    },\r\n    \"answer\": \"110\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5109/question/answer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5109",
+					"path": [
+						"question",
+						"answer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Question - Historical Figure",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5109/question/historicalFigure",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5109",
+					"path": [
+						"question",
+						"historicalFigure"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Question Batch - Pokemon Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5109/question/historicalFigure?count=5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5109",
+					"path": [
+						"question",
+						"historicalFigure"
+					],
+					"query": [
+						{
+							"key": "count",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit Answer - Historical Figure",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"question\": {\r\n        \"type\": \"HistoricalFigureQuestion\",\r\n        \"message\": \"What was the cause of death of Albert Einstein?\",\r\n        \"topic\": {\r\n            \"id\": 1\r\n        },\r\n        \"field\": \"CauseOfDeath\"\r\n    },\r\n    \"answer\": \"natural cause\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5109/question/answer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5109",
+					"path": [
+						"question",
+						"answer"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
