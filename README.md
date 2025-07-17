@@ -40,3 +40,12 @@ a user can pick any question they know for sure the answer, and get it always co
    answer submission. This way, users would still be able to "cheat" by sending always the same
    batch until they get all the answers right, but at least they won't be able to craft their
    own selection of questions from scratch.
+
+
+## Commands
+
+- Run unit tests:
+
+```bash
+dotnet test FlashcardApp.Tests
+```
