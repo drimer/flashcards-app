@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardApp;
 
@@ -10,6 +11,12 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddAuthorization();
+
+        // Register Dependencies for DI
+        builder.Services.AddScoped<Client.PokemonApiClient>();
+        builder.Services.AddScoped<Service.PokemonApiService>();
+        builder.Services.AddScoped<Client.HistoricalFigureApiClient>();
+        builder.Services.AddScoped<Controller.QuestionsController>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -25,15 +32,31 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-
-        app.UseAuthorization();
-
-        app.MapGet("/question/{topic}", Controller.QuestionsController.GetNewQuestion)
+        app.MapGet("/question/{topic}", async (HttpContext context, string topic, [FromServices] Controller.QuestionsController questionsController) =>
+        {
+            var result = await questionsController.GetNewQuestion(context, topic);
+            return Results.Ok(result);
+        })
             .WithName("GetNewQuestion")
             .WithOpenApi();
-        app.MapPost("/question/answer", Controller.QuestionsController.SubmitAnswer)
+
+        app.MapPost("/question/answer", async (HttpContext context, [FromServices] Controller.QuestionsController questionsController) =>
+        {
+            var request = await context.Request.ReadFromJsonAsync<Dto.PostAnswerRequestDto>();
+            if (request == null)
+            {
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsync("Invalid request body.");
+                return;
+            }
+            var result = await questionsController.SubmitAnswer(context, request);
+            await context.Response.WriteAsJsonAsync(result);
+        })
             .WithName("SubmitAnswer")
             .WithOpenApi()
+            .Accepts<Dto.PostAnswerRequestDto>("application/json")
+            .Produces<Dto.PostAnswerResponseDto>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
             .Accepts<Dto.PostAnswerRequestDto>("application/json")
             .Produces<Dto.PostAnswerResponseDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status400BadRequest);

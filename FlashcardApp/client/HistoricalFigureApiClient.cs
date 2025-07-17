@@ -15,12 +15,12 @@ public class HistoricalFigureApiClient
         },
     };
 
-    public HistoricalFigure? GetHistoricalFigureByNumberAsync(int number)
+    public async Task<HistoricalFigure?> GetHistoricalFigureByNumberAsync(int number)
     {
         return AllFigures.FirstOrDefault(f => f.Number == number);
     }
 
-    public HistoricalFigure GetRandomHistoricalFigureAsync()
+    public async Task<HistoricalFigure> GetRandomHistoricalFigureAsync()
     {
         var random = new Random();
         return AllFigures[random.Next(AllFigures.Length)];
