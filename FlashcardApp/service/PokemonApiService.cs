@@ -1,17 +1,11 @@
-using System.ComponentModel;
 using FlashcardApp.Client;
 
 namespace FlashcardApp.Service;
 
 
-public class PokemonApiService
+public class PokemonApiService : IPokemonApiService
 {
-    private readonly PokemonApiClient _pokemonApiClient;
-
-    public PokemonApiService(PokemonApiClient pokemonApiClient)
-    {
-        _pokemonApiClient = pokemonApiClient;
-    }
+    private static readonly PokemonApiClient _pokemonApiClient = new();
 
     public async Task<Model.Pokemon?> GetRandomPokemonAsync()
     {

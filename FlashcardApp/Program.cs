@@ -1,3 +1,5 @@
+using FlashcardApp.Client;
+using FlashcardApp.Service;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardApp;
@@ -13,9 +15,9 @@ public class Program
         builder.Services.AddAuthorization();
 
         // Register Dependencies for DI
-        builder.Services.AddScoped<Client.PokemonApiClient>();
-        builder.Services.AddScoped<Service.PokemonApiService>();
-        builder.Services.AddScoped<Client.HistoricalFigureApiClient>();
+        builder.Services.AddScoped<PokemonApiClient>();
+        builder.Services.AddScoped<IPokemonApiService, PokemonApiService>();
+        builder.Services.AddScoped<IHistoricalFigureApiClient, HistoricalFigureApiClient>();
         builder.Services.AddScoped<Controller.QuestionsController>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

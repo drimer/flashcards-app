@@ -8,10 +8,10 @@ namespace FlashcardApp.Controller;
 
 public class QuestionsController
 {
-    public readonly PokemonApiService PokemonApiService;
-    public readonly HistoricalFigureApiClient HistoricalFigureApiClient;
+    public readonly IPokemonApiService PokemonApiService;
+    public readonly IHistoricalFigureApiClient HistoricalFigureApiClient;
 
-    public QuestionsController(PokemonApiService pokemonApiService, HistoricalFigureApiClient historicalFigureApiClient)
+    public QuestionsController(IPokemonApiService pokemonApiService, IHistoricalFigureApiClient historicalFigureApiClient)
     {
         PokemonApiService = pokemonApiService;
         HistoricalFigureApiClient = historicalFigureApiClient;

@@ -2,7 +2,7 @@ using FlashcardApp.Model;
 
 namespace FlashcardApp.Client;
 
-public class HistoricalFigureApiClient
+public class HistoricalFigureApiClient : IHistoricalFigureApiClient
 {
     private static readonly HistoricalFigure[] AllFigures = new[]
     {

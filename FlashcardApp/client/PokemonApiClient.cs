@@ -14,10 +14,12 @@ public class PokemonApiClient
         if (!Uri.IsWellFormedUriString(apiUrl, UriKind.Absolute))
         {
             BaseUrl = "";
-            throw new InvalidOperationException("POKEMON_API_URL environment variable is not a valid URL.");
+            // throw new InvalidOperationException("POKEMON_API_URL environment variable is not a valid URL.");
         }
-
-        BaseUrl = string.Join("", apiUrl.TrimEnd('/'));
+        else
+        {
+            BaseUrl = string.Join("", apiUrl.TrimEnd('/'));
+        }
     }
 
     public async Task<Model.Pokemon> GetPokemonByNumberAsync(int number)
