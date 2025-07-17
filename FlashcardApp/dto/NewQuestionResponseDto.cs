@@ -4,5 +4,6 @@ namespace FlashcardApp.Dto;
 
 public class NewQuestionResponseDto
 {
-    public QuestionDto Question { get; set; } = new QuestionDto();
+    public string? Error { get; set; }
+    public QuestionDto[] Questions { get; set; } = Array.Empty<QuestionDto>();
 }
