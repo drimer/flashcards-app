@@ -1,9 +1,10 @@
-namespace FlashcardApp.Model;
-
-public interface IQuestion
+namespace FlashcardApp.Model
 {
-    string Type { get; }
-    ITopic getTopic();
-    string AsString();
-    string Field { get; init; }
+    public interface IQuestion
+    {
+        string Type { get; }
+        ITopic GetTopic();
+        string AsString();
+        string Field { get; init; }
+    }
 }

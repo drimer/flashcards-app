@@ -1,41 +1,38 @@
 using FlashcardApp.Client;
 using FlashcardApp.Service;
-using Microsoft.AspNetCore.Mvc;
 
-namespace FlashcardApp;
-
-
-public class Program
+namespace FlashcardApp
 {
-    public static void Main(string[] args)
+    public class Program
     {
-        var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddAuthorization();
-        builder.Services.AddScoped<PokemonApiClient>();
-        builder.Services.AddScoped<IPokemonApiService, PokemonApiService>();
-        builder.Services.AddScoped<IHistoricalFigureApiClient, HistoricalFigureApiClient>();
-        // builder.Services.AddScoped<Controller.QuestionsController>();
-        builder.Services.AddControllers();
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-
-        var app = builder.Build();
-
-        if (app.Environment.IsDevelopment())
+        public static void Main(string[] args)
         {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        }
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddScoped<PokemonApiClient>();
+            builder.Services.AddScoped<IPokemonApiService, PokemonApiService>();
+            builder.Services.AddScoped<IHistoricalFigureApiClient, HistoricalFigureApiClient>();
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
 
-        app.UseRouting();
-        app.UseHttpsRedirection();
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-        });
+            WebApplication app = builder.Build();
+
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseRouting();
+            app.UseHttpsRedirection();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
 
 #if !LAMBDA
-        app.Run();
+            app.Run();
 #endif
+        }
     }
 }

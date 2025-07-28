@@ -1,31 +1,36 @@
-namespace FlashcardApp.Service;
-
+using System.Globalization;
 using FlashcardApp.Model;
 
-public class PokemonAnswerEvaluator : IAnswerEvaluator
+namespace FlashcardApp.Service
 {
-    public bool IsCorrect(IQuestion question, Answer answer)
+    public class PokemonAnswerEvaluator : IAnswerEvaluator
     {
-        try
+        public bool IsCorrect(IQuestion question, Answer answer)
         {
-            var pokemonQuestion = question as PokemonQuestion;
+            try
+            {
+                PokemonQuestion? pokemonQuestion = question as PokemonQuestion;
 
-            if (pokemonQuestion.Field == "type")
-            {
-                return pokemonQuestion.Pokemon.Types.Contains(answer.Value.Trim().ToLower());
+                if (pokemonQuestion.Field == "type")
+                {
+                    return pokemonQuestion.Pokemon.Types.Contains(answer.Value.Trim().ToLower(CultureInfo.InvariantCulture));
+                }
+                else
+                {
+                    if (pokemonQuestion.Field == "hp")
+                    {
+                        return int.Parse(answer.Value, CultureInfo.InvariantCulture) == pokemonQuestion.Pokemon.Hp;
+                    }
+                    else
+                    {
+                        throw new NotSupportedException($"Field {pokemonQuestion.Field} is not supported for Pokemon questions.");
+                    }
+                }
             }
-            else if (pokemonQuestion.Field == "hp")
+            catch (InvalidCastException)
             {
-                return int.Parse(answer.Value) == pokemonQuestion.Pokemon.Hp;
+                throw new ArgumentException("The question is not a Pokemon question.", nameof(question));
             }
-            else
-            {
-                throw new NotSupportedException($"Field {pokemonQuestion.Field} is not supported for Pokemon questions.");
-            }
-        }
-        catch (InvalidCastException)
-        {
-            throw new ArgumentException("The question is not a Pokemon question.", nameof(question));
         }
     }
 }

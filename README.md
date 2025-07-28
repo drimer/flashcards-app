@@ -23,6 +23,16 @@
    dotnet lambda package FlashcardApp/bin/Release/net8.0/flashcardapp-lambda.zip --output-package FlashcardApp/bin/Release/net8.0/flashcardapp-lambda.zip --configuration Release --framework net8.0 -pl FlashcardApp
    ```
 
+## Development tips
+
+Install formatting tool:
+```sh
+dotnet tool install -g dotnet-format
+```
+
+Format the project's code:
+```sh
+```
 
 ## Notes
 - The Lambda entry point is in `LambdaEntryPoint.cs`.

@@ -1,8 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Mvc;
-
 namespace FlashcardApp;
 
 public class Startup
@@ -13,7 +8,6 @@ public class Startup
         services.AddScoped<Client.PokemonApiClient>();
         services.AddScoped<Service.IPokemonApiService, Service.PokemonApiService>();
         services.AddScoped<Client.IHistoricalFigureApiClient, Client.HistoricalFigureApiClient>();
-        // services.AddScoped<Controller.QuestionsController>();
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();

@@ -1,12 +1,13 @@
 using Amazon.Lambda.AspNetCoreServer;
 
-namespace FlashcardApp;
-
-public class LambdaEntryPoint : APIGatewayProxyFunction
+namespace FlashcardApp
 {
-    protected override void Init(IWebHostBuilder builder)
+    public class LambdaEntryPoint : APIGatewayProxyFunction
     {
-        builder.UseLambdaServer();
-        builder.UseStartup<Startup>();
+        protected override void Init(IWebHostBuilder builder)
+        {
+            _ = builder.UseLambdaServer();
+            _ = builder.UseStartup<Startup>();
+        }
     }
 }

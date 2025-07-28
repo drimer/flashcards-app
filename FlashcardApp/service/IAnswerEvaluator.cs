@@ -1,6 +1,6 @@
-namespace FlashcardApp.Service;
-
 using FlashcardApp.Model;
+
+namespace FlashcardApp.Service;
 
 public interface IAnswerEvaluator
 {

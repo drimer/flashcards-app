@@ -1,0 +1,28 @@
+
+[*.cs]
+dotnet_analyzer_diagnostic.severity = error   # Make every report an error, and allow suppression below
+dotnet_analyzer_diagnostic.category-Style.severity = suggestion
+dotnet_analyzer_diagnostic.category-Simplification.severity = suggestion
+dotnet_analyzer_diagnostic.IDE0160.severity = none
+
+# Commonly ignored StyleCop rules
+dotnet_diagnostic.SA1309.severity = none   # Field names should not begin with underscore
+dotnet_diagnostic.SA1401.severity = none   # Fields should be private
+dotnet_diagnostic.SA1101.severity = none   # Prefix local calls with 'this.'
+dotnet_diagnostic.SA1124.severity = none   # Do not use regions
+dotnet_diagnostic.SA1516.severity = none   # Elements should be separated by blank line
+dotnet_diagnostic.SA1601.severity = none   # Partial elements should be documented
+dotnet_diagnostic.SA1602.severity = none   # Enumeration items should be documented
+dotnet_diagnostic.SA1010.severity = none
+dotnet_diagnostic.SA1633.severity = none
+dotnet_diagnostic.SA1200.severity = none
+dotnet_diagnostic.SA1600.severity = none
+dotnet_diagnostic.SA1634.severity = none   # File header should be followed by blank line
+dotnet_diagnostic.SA1201.severity = none   # Elements should appear in correct order
+dotnet_diagnostic.SA1210.severity = none   # Using directives should be ordered alphabetically by namespace
+dotnet_diagnostic.SA1649.severity = none
+dotnet_diagnostic.SA1402.severity = none
+
+dotnet_diagnostic.ASP0014.severity = none
+
+

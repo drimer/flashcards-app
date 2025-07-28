@@ -1,8 +1,9 @@
-namespace FlashcardApp.Dto;
-
-public class PostAnswerResponseDto
+namespace FlashcardApp.Dto
 {
-    public string? Error { get; set; }
-    public bool IsCorrect { get; set; }
-    public string Message { get; set; } = string.Empty;
+    public class PostAnswerResponseDto
+    {
+        public string? Error { get; set; }
+        public bool IsCorrect { get; set; }
+        public string Message { get; set; } = string.Empty;
+    }
 }

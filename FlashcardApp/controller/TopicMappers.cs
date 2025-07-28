@@ -1,6 +1,5 @@
 namespace FlashcardApp.Controller;
 
-
 public static class PokemonTopicMapper
 {
     public static Model.Pokemon ToPokemon(this Dto.TopicDto topic)
@@ -20,7 +19,6 @@ public static class PokemonTopicMapper
     }
 }
 
-
 public static class HistoricalFigureTopicMapper
 {
     public static Model.HistoricalFigure ToHistoricalFigure(this Dto.TopicDto topic)
@@ -39,4 +37,3 @@ public static class HistoricalFigureTopicMapper
         };
     }
 }
-

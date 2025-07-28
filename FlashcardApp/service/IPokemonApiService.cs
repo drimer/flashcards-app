@@ -1,7 +1,11 @@
-namespace FlashcardApp.Service;
+using FlashcardApp.Model;
 
-public interface IPokemonApiService
+namespace FlashcardApp.Service
 {
-    Task<Model.Pokemon?> GetRandomPokemonAsync();
-    Task<Model.Pokemon> GetPokemonByNumberAsync(int number);
+    public interface IPokemonApiService
+    {
+        Task<Pokemon?> GetRandomPokemonAsync();
+
+        Task<Pokemon> GetPokemonByNumberAsync(int number);
+    }
 }

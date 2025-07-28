@@ -1,6 +1,7 @@
-namespace FlashcardApp.Model;
-
-public class Answer
+namespace FlashcardApp.Model
 {
-    public string Value { get; set; } = string.Empty;
+    public class Answer
+    {
+        public string Value { get; set; } = string.Empty;
+    }
 }

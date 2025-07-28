@@ -1,5 +1,3 @@
-using FlashcardApp.Model;
-
 namespace FlashcardApp.Client;
 
 public interface IHistoricalFigureApiClient

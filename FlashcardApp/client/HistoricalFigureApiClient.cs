@@ -4,16 +4,17 @@ namespace FlashcardApp.Client;
 
 public class HistoricalFigureApiClient : IHistoricalFigureApiClient
 {
-    private static readonly HistoricalFigure[] AllFigures = new[]
-    {
-        new HistoricalFigure{
-            Number = 1,
-            Name = "Albert Einstein",
-            Conflicts = new[] { "World War II" },
-            Occupation = new[] { "Theoretical Physicist", "Philosopher of Science" },
-            CauseOfDeath = "Natural Causes"
-        },
-    };
+    private static readonly HistoricalFigure[] AllFigures =
+    [
+        new HistoricalFigure
+            {
+                Number = 1,
+                Name = "Albert Einstein",
+                Conflicts = ["World War II"],
+                Occupation = ["Theoretical Physicist", "Philosopher of Science"],
+                CauseOfDeath = "Natural Causes",
+            },
+        ];
 
     public async Task<HistoricalFigure?> GetHistoricalFigureByNumberAsync(int number)
     {
@@ -22,7 +23,7 @@ public class HistoricalFigureApiClient : IHistoricalFigureApiClient
 
     public async Task<HistoricalFigure> GetRandomHistoricalFigureAsync()
     {
-        var random = new Random();
+        Random random = new Random();
         return AllFigures[random.Next(AllFigures.Length)];
     }
 }

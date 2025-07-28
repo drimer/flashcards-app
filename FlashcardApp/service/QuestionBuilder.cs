@@ -1,33 +1,30 @@
 using FlashcardApp.Model;
 
-namespace FlashcardApp.Service;
-
-
-public class QuestionBuilder
+namespace FlashcardApp.Service
 {
-    public IQuestion CreateQuestion(ITopic topic)
+    public class QuestionBuilder
     {
-        switch (topic)
+        public IQuestion CreateQuestion(ITopic topic)
         {
-            case Pokemon pokemon:
-                return BuildPokemonQuestion(pokemon);
-            case HistoricalFigure historicalFigure:
-                return BuildHistoricalFigureQuestion(historicalFigure);
-            default:
-                throw new ArgumentException("Unsupported topic type");
+            return topic switch
+            {
+                Pokemon pokemon => BuildPokemonQuestion(pokemon),
+                HistoricalFigure historicalFigure => BuildHistoricalFigureQuestion(historicalFigure),
+                _ => throw new ArgumentException("Unsupported topic type"),
+            };
         }
-    }
 
-    private PokemonQuestion BuildPokemonQuestion(Pokemon pokemon)
-    {
-        var randomField = new Random().Next(0, 2) == 0 ? "type" : "hp";
-        return new PokemonQuestion(pokemon, randomField);
-    }
+        private static PokemonQuestion BuildPokemonQuestion(Pokemon pokemon)
+        {
+            string randomField = new Random().Next(0, 2) == 0 ? "type" : "hp";
+            return new PokemonQuestion(pokemon, randomField);
+        }
 
-    private HistoricalFigureQuestion BuildHistoricalFigureQuestion(HistoricalFigure figure)
-    {
-        string[] fields = { "Conflicts", "Occupation", "CauseOfDeath" };
-        var randomField = fields[new Random().Next(fields.Length)];
-        return new HistoricalFigureQuestion(figure, randomField);
+        private static HistoricalFigureQuestion BuildHistoricalFigureQuestion(HistoricalFigure figure)
+        {
+            string[] fields = ["Conflicts", "Occupation", "CauseOfDeath"];
+            string randomField = fields[new Random().Next(fields.Length)];
+            return new HistoricalFigureQuestion(figure, randomField);
+        }
     }
 }

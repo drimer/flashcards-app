@@ -1,26 +1,25 @@
-namespace FlashcardApp.Model;
-
-public sealed class HistoricalFigureQuestion : IQuestion
+namespace FlashcardApp.Model
 {
-    public string Type => "HistoricalFigureQuestion";
-    public HistoricalFigure Topic { get; init; }
-    public string Field { get; init; }
-
-    public HistoricalFigureQuestion(HistoricalFigure topic, string field)
+    public sealed class HistoricalFigureQuestion(HistoricalFigure topic, string field) : IQuestion
     {
-        Topic = topic;
-        Field = field;
-    }
+        public string Type => "HistoricalFigureQuestion";
+        public HistoricalFigure Topic { get; init; } = topic;
+        public string Field { get; init; } = field;
 
-    public ITopic getTopic() => Topic;
-    public string AsString()
-    {
-        return Field.ToLower() switch
+        public ITopic GetTopic()
         {
-            "conflicts" => $"Name one conflict where {Topic.Name} was involved in.",
-            "occupation" => $"Name one occupation of {Topic.Name}.",
-            "causeofdeath" => $"What was the cause of death of {Topic.Name}?",
-            _ => throw new ArgumentException($"Unknown field: {Field}")
-        };
+            return Topic;
+        }
+
+        public string AsString()
+        {
+            return Field.ToLowerInvariant() switch
+            {
+                "conflicts" => $"Name one conflict where {Topic.Name} was involved in.",
+                "occupation" => $"Name one occupation of {Topic.Name}.",
+                "causeofdeath" => $"What was the cause of death of {Topic.Name}?",
+                _ => throw new ArgumentException($"Unknown field: {Field}"),
+            };
+        }
     }
 }

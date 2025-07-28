@@ -1,32 +1,24 @@
-namespace FlashcardApp.Model;
-
-public sealed class PokemonQuestion : IQuestion
+namespace FlashcardApp.Model
 {
-    public string Type { get => "PokemonQuestion"; }
-    public Pokemon Pokemon { get; init; }
-    public string Field { get; init; }
-
-    public PokemonQuestion(Pokemon pokemon, string field)
+    public sealed class PokemonQuestion(Pokemon pokemon, string field) : IQuestion
     {
-        Pokemon = pokemon;
-        Field = field;
-    }
+        public string Type => "PokemonQuestion";
+        public Pokemon Pokemon { get; init; } = pokemon;
+        public string Field { get; init; } = field;
 
-    public string AsString()
-    {
-        switch (Field)
+        public string AsString()
         {
-            case "type":
-                return $"What is {Pokemon.CapitalisedName}'s type?";
-            case "hp":
-                return $"What is {Pokemon.CapitalisedName}'s base HP?";
-            default:
-                throw new ArgumentException($"Unknown field: {Field}");
+            return Field switch
+            {
+                "type" => $"What is {Pokemon.CapitalisedName}'s type?",
+                "hp" => $"What is {Pokemon.CapitalisedName}'s base HP?",
+                _ => throw new ArgumentException($"Unknown field: {Field}"),
+            };
         }
-    }
 
-    public ITopic getTopic()
-    {
-        return Pokemon;
+        public ITopic GetTopic()
+        {
+            return Pokemon;
+        }
     }
 }
