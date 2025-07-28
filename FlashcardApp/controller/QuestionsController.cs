@@ -3,10 +3,12 @@ using FlashcardApp.Client;
 using FlashcardApp.Model;
 using FlashcardApp.Service;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlashcardApp.Controller;
 
-public class QuestionsController
+[Route("question")]
+public class QuestionsController : ControllerBase
 {
     public readonly IPokemonApiService PokemonApiService;
     public readonly IHistoricalFigureApiClient HistoricalFigureApiClient;
@@ -17,9 +19,16 @@ public class QuestionsController
         HistoricalFigureApiClient = historicalFigureApiClient;
     }
 
-    public async Task<Dto.NewQuestionResponseDto> GetNewQuestion(HttpContext httpContext, string topic)
+    [HttpGet]
+    public async Task<Dto.NewQuestionResponseDto> TestGet()
     {
-        var countSuccess = int.TryParse(httpContext.Request.Query["count"], out int count);
+        return await GetNewQuestion("pokemon");
+    }
+
+    [HttpGet("{topic}")]
+    public async Task<Dto.NewQuestionResponseDto> GetNewQuestion(string topic)
+    {
+        var countSuccess = int.TryParse(this.HttpContext.Request.Query["count"], out int count);
         if (countSuccess && count < 1)
         {
             return new Dto.NewQuestionResponseDto { Error = "Count must be at least 1." };
@@ -33,7 +42,8 @@ public class QuestionsController
         };
     }
 
-    public async Task<Dto.PostAnswerResponseDto> SubmitAnswer(HttpContext httpContext, Dto.PostAnswerRequestDto request)
+    [HttpPost("answer")]
+    public async Task<Dto.PostAnswerResponseDto> SubmitAnswer(Dto.PostAnswerRequestDto request)
     {
         return request.Question.Type switch
         {

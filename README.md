@@ -1,3 +1,35 @@
+# Deploying to AWS Lambda
+
+## Prerequisites
+
+- [.NET 8 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
+- [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) (configured with your credentials)
+- [Amazon.Lambda.Tools](https://github.com/aws/aws-extensions-for-dotnet-cli-tools) .NET CLI tool:
+  ```sh
+  dotnet tool install -g Amazon.Lambda.Tools
+  ```
+
+## Build and Deploy
+
+1. **Restore dependencies:**
+   ```sh
+   dotnet restore FlashcardApp/FlashcardApp.Lambda.csproj
+   ```
+
+
+2. **Publish the Lambda package:**
+   ```sh
+   cd FlashcardApp
+   dotnet lambda package FlashcardApp/bin/Release/net8.0/flashcardapp-lambda.zip --output-package FlashcardApp/bin/Release/net8.0/flashcardapp-lambda.zip --configuration Release --framework net8.0 -pl FlashcardApp
+   ```
+
+
+## Notes
+- The Lambda entry point is in `LambdaEntryPoint.cs`.
+- The handler is set in `aws-lambda-tools-defaults.json`.
+- Make sure your IAM role has the correct permissions for Lambda execution.
+
+
 # flashcards-app
 
 This is a proof of concept I am using to learn C# and .NET.

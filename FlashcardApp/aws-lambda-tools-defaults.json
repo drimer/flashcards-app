@@ -1,0 +1,14 @@
+{
+  "Information": "This is a sample AWS Lambda configuration for .NET 8 minimal API.",
+  "profile": "default",
+  "region": "us-east-1",
+  "configuration": "Release",
+  "function-runtime": "dotnet8",
+  "function-memory-size": 256,
+  "function-timeout": 30,
+  "function-handler": "FlashcardApp::FlashcardApp.LambdaEntryPoint::FunctionHandlerAsync",
+  "framework": "net8.0",
+  "function-name": "FlashcardAppLambda",
+  "package-type": "Zip",
+  "function-role": "arn:aws:iam::123456789012:role/lambda_exec_role"
+}
