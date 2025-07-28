@@ -19,7 +19,6 @@
 
 2. **Publish the Lambda package:**
    ```sh
-   cd FlashcardApp
    dotnet lambda package FlashcardApp/bin/Release/net8.0/flashcardapp-lambda.zip --output-package FlashcardApp/bin/Release/net8.0/flashcardapp-lambda.zip --configuration Release --framework net8.0 -pl FlashcardApp
    ```
 
