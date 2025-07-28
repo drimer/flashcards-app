@@ -22,6 +22,7 @@ dotnet_diagnostic.SA1201.severity = none   # Elements should appear in correct o
 dotnet_diagnostic.SA1210.severity = none   # Using directives should be ordered alphabetically by namespace
 dotnet_diagnostic.SA1649.severity = none
 dotnet_diagnostic.SA1402.severity = none
+dotnet_diagnostic.CA1707.severity = none
 
 dotnet_diagnostic.ASP0014.severity = none
 
